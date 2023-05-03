@@ -33,6 +33,7 @@ function convertToRating(popularity){
     const [query, setQuery] = useState('')
     const [artists, setArtists] = useState([])
     const [error, setError] = useState(false)
+    const [timeoutId, setTimeoutId] = useState(null)
   
     useEffect( () => {
      
@@ -73,12 +74,17 @@ function convertToRating(popularity){
        .catch( () => { setError(true)})
   
     }, [query, navigate])
+
+    const queryInput = (e) => {
+      clearTimeout(timeoutId)
+      const currentTimeout = setTimeout( () => { setQuery(e.target.value)}, 500)
+      setTimeoutId(currentTimeout)
+    }
   
-    
     return ( 
       <div className="container-fluid">
         <div className="row">
-          <SearchBar onChange={(e) => { setQuery(e.target.value)}} />
+          <SearchBar onChange={queryInput} />
           <div className="col-md-12 cards-container" style={error ? {display: 'none'} : {} } >
             {artists}
           </div>
